@@ -3,9 +3,11 @@ package com.example.lyceum_saturday10_2025.features.goods.presentation.component
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -26,6 +28,7 @@ import com.example.lyceum_saturday10_2025.features.goods.presentation.model.Good
 fun GoodsCard(
     goodsItem: GoodsItem,
     onGoodClicked: (GoodsItem) -> Unit,
+    onGoodDelete: (GoodsItem) -> Unit,
 ) {
     Card(
         onClick = {
@@ -67,6 +70,16 @@ fun GoodsCard(
                 modifier = Modifier.padding(16.dp),
                 text = goodsItem.description
             )
+
+            Spacer(Modifier.height(16.dp))
+
+            Button(
+                onClick = {
+                    onGoodDelete(goodsItem)
+                }
+            ) {
+                Text("Удалить товар")
+            }
         }
     }
 }
@@ -81,7 +94,8 @@ private fun GoodsCardPreview() {
             description = "test description",
             imageURL = ""
         ),
-        onGoodClicked = {}
+        onGoodClicked = {},
+        onGoodDelete = {}
     )
 }
 

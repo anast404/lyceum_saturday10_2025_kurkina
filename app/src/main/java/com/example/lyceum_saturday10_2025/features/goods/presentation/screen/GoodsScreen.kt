@@ -20,11 +20,14 @@ fun GoodsScreen(
     GoodsScreenContent(
         state = state,
 //        onAddClicked = viewmodel::addGood
-        onAddClicked = { name, description ->
-            viewmodel.addGood(name, description)
+        onAddClicked = { name, description, imageURL ->
+            viewmodel.addGood(name, description, imageURL)
         },
         onGoodClicked = { goodsItem ->
             navigator.navigate(GoodsDetailsDestination(goodsItem))
+        },
+        onGoodDelete = { goodsItem ->
+            viewmodel.deleteGood(goodsItem)
         }
     )
 }

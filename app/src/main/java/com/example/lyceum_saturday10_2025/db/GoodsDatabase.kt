@@ -24,6 +24,7 @@ data class Good(
     val id: Int = 0,
     val name: String,
     val description: String,
+    val imageURL: String,
     val rating: Int,
 )
 
@@ -41,4 +42,7 @@ interface GoodDao {
 
     @Delete
     fun delete(good: Good)
+
+    @Query("SELECT * FROM Good WHERE id = :goodId")
+    fun getGoodById(goodId: Int): Good?
 }

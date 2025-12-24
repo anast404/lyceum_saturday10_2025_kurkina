@@ -24,38 +24,58 @@ class GoodsViewModel : ViewModel() {
             ?.getAllGoods()
             ?.map { good ->
                 GoodsItem(
+                    id = good.id,
                     name = good.name,
                     rating = good.rating,
                     description = good.description,
-                    imageURL = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSibbxABu10t0qxQWHjH-QQFSWaCgd68RbztA&s"
+                    imageURL = good.imageURL,
                 )
             } ?: emptyList()
 
         viewModelScope.launch {
             _state.value = GoodsUiState(
-                mockList + goodsFromDb
+//                mockList + goodsFromDb
+                        goodsFromDb
             )
         }
     }
 
-    fun addGood(name: String, description: String) {
-        val goodsList = state.value.items.toMutableList()
-        goodsList.add(
-            GoodsItem(
-                name = name,
-                rating = 5,
-                description = description,
-                imageURL = ""
-            )
-        )
-        db?.goodsDao()?.insert(
-            Good(
-                name = name,
-                description = description,
-                rating = 5
-            )
-        )
-        _state.value = GoodsUiState(goodsList)
+    fun updateViewState() {
+        val goodsFromDb = db
+            ?.goodsDao()
+            ?.getAllGoods()
+            ?.map { good ->
+                GoodsItem(
+                    id = good.id,
+                    name = good.name,
+                    rating = good.rating,
+                    description = good.description,
+                    imageURL = good.imageURL,
+                )
+            } ?: emptyList()
+
+        _state.value = GoodsUiState(goodsFromDb)
+    }
+
+    fun addGood(name: String, description: String, imageURL: String = "") {
+        db?.goodsDao()?.insert(Good(
+            name = name,
+            description = description,
+            rating = 5,
+            imageURL = imageURL,
+        ))
+
+        updateViewState()
+    }
+
+    fun deleteGood(goodsItem: GoodsItem) {
+        val good = db?.goodsDao()?.getGoodById(goodsItem.id)
+
+        if(good != null) {
+            db.goodsDao().delete(good)
+
+            updateViewState()
+        }
     }
 
 
